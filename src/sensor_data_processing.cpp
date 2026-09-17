@@ -37,9 +37,8 @@ int main()
     srand(time(0));
 
     std::vector<double> averages;
-
+    CALLGRIND_START_INSTRUMENTATION;
     for (int i = 0; i < NUM_SENSORS; ++i) {
-        CALLGRIND_TOGGLE_COLLECT;
         std::vector<int>* sensor_data = generate_sensor_data();
 
         double avg = calculate_average(sensor_data);
@@ -47,8 +46,9 @@ int main()
         averages.push_back(avg);
         CALLGRIND_TOGGLE_COLLECT;
         usleep(1000);   // aproximadamente 1 ms
+        CALLGRIND_TOGGLE_COLLECT;
     }
-
+    CALLGRIND_STOP_INSTRUMENTATION;
     std::cout << "Processed data from "
               << NUM_SENSORS
               << " sensors.\n";
