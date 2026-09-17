@@ -20,7 +20,7 @@ SRC         = $(SRC_DIR)/sensor_data_processing.cpp
 TARGET_HOST = $(BIN_DIR)/sensor_host
 TARGET_RPI  = $(BIN_DIR)/sensor_rpi
 
-.PHONY: all directories clean host rpi git-sync help
+.PHONY: all directories clean host rpi git-sync git-pull help
 
 # Regla por defecto: crea carpetas y compila ambas versiones
 all: directories $(TARGET_HOST) $(TARGET_RPI)
@@ -62,6 +62,10 @@ git-sync:
 		fi && git push; \
 	fi
 
+# Descarga e integra los cambios del repositorio remoto
+git-pull:
+	git pull
+
 # Ayuda rápida de uso
 help:
 	@echo "Opciones disponibles:"
@@ -70,3 +74,4 @@ help:
 	@echo "  make rpi     - Compila solo la versión cruzada (sensor_rpi)"
 	@echo "  make clean   - Limpia los binarios generados"
 	@echo "  make git-sync - Hace git add ., commit con mensaje opcional y git push"
+	@echo "  make git-pull - Descarga e integra los cambios del repositorio remoto"
