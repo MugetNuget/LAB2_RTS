@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <unistd.h>
+#include <valgrind/callgrind.h>
 
 #define NUM_SENSORS 1000
 #define READINGS_PER_SENSOR 100
@@ -38,12 +39,13 @@ int main()
     std::vector<double> averages;
 
     for (int i = 0; i < NUM_SENSORS; ++i) {
+        CALLGRIND_TOGGLE_COLLECT;
         std::vector<int>* sensor_data = generate_sensor_data();
 
         double avg = calculate_average(sensor_data);
 
         averages.push_back(avg);
-
+        CALLGRIND_TOGGLE_COLLECT;
         usleep(1000);   // aproximadamente 1 ms
     }
 
