@@ -2,8 +2,11 @@
 CXX_NATIVE = g++
 CXX_CROSS  = aarch64-linux-gnu-g++
 
-# Banderas de compilación recomendadas por la guía (C++11, debug max, sin optimización)
+# Banderas de compilación
 CXXFLAGS   = -std=c++11 -ggdb3 -O0 -Wall -Wextra -pedantic
+
+# Banderas de enlace (incrusta la runtime de C++ para evitar errores de GLIBCXX en la Pi)
+LDFLAGS_RPI = -static-libstdc++ -static-libgcc
 
 # Directorios del proyecto
 SRC_DIR     = src
@@ -37,7 +40,7 @@ $(TARGET_HOST): $(SRC)
 rpi: directories $(TARGET_RPI)
 
 $(TARGET_RPI): $(SRC)
-	$(CXX_CROSS) $(CXXFLAGS) -o $@ $<
+	$(CXX_CROSS) $(CXXFLAGS) -o $@ $< $(LDFLAGS_RPI)
 
 # Limpieza de binarios y archivos temporales
 clean:

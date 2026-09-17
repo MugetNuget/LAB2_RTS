@@ -24,7 +24,7 @@ std::vector<int>* generate_sensor_data(){
 double calculate_average(std::vector<int>* data){
     double sum = 0;
 
-    for (int i = 0; i <= data->size(); ++i){
+    for (int i = 0; i < data->size(); ++i){
         sum += (*data)[i];
     }
 
