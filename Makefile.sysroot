@@ -1,17 +1,11 @@
 # ============================================================
 # Makefile para cross-compilación Raspberry Pi 4 ARM64
-# usando sysroot Debian 12 / glibc 2.36
+# usando el toolchain AArch64 instalado en el sistema
 # ============================================================
 
 CXX_CROSS = aarch64-linux-gnu-g++
 
 CXXFLAGS = -std=c++11 -ggdb3 -O0 -Wall -Wextra -pedantic
-
-# Sysroot Debian 12 ARM64
-SYSROOT = /opt/lab2-sysroot
-
-# Enlace
-LDFLAGS_RPI = -L$(SYSROOT)/usr/lib/aarch64-linux-gnu -l:libstdc++.so.6
 
 # Directorios
 SRC_DIR     = src
@@ -33,17 +27,7 @@ directories:
 
 $(TARGET_RPI): $(SRC)
 	$(CXX_CROSS) $(CXXFLAGS) \
-		--sysroot=$(SYSROOT) \
-		-nostdinc++ \
-		-isystem $(SYSROOT)/usr/include/c++/12 \
-		-isystem $(SYSROOT)/usr/include/aarch64-linux-gnu/c++/12 \
-		-isystem /usr/include \
-		-isystem $(SYSROOT)/usr/include/aarch64-linux-gnu \
-		-isystem $(SYSROOT)/usr/include \
-		-L$(SYSROOT)/usr/lib/aarch64-linux-gnu \
-		-Wl,-rpath-link,$(SYSROOT)/usr/lib/aarch64-linux-gnu \
-		-o $@ $< \
-		$(LDFLAGS_RPI)
+		-o $@ $<
 
 clean:
 	rm -f $(TARGET_RPI)
