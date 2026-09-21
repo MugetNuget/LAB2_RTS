@@ -3,12 +3,12 @@ CXX_NATIVE = g++
 CXX_CROSS  = aarch64-linux-gnu-g++
 
 # Banderas de compilación
-CXXFLAGS   = -std=c++11 -ggdb3 -O0 -Wall -Wextra -pedantic
+CXXFLAGS = -std=c++11 -ggdb3 -O0 -Wall -Wextra -pedantic -fno-omit-frame-pointer
 
 # Banderas de enlace para la Raspberry Pi:
 # -static-libstdc++ y -static-libgcc evitan GLIBCXX/GLIBCCXX en la Pi,
 # pero -static es el que evita la dependencia de GLIBC_2.38 del host de compilación.
-LDFLAGS_RPI = -static
+LDFLAGS_RPI = -static-libstdc++ -static-libgcc
 
 # Directorios del proyecto
 SRC_DIR     = src
@@ -46,7 +46,7 @@ $(TARGET_RPI): $(SRC)
 
 # Perfilado con Callgrind del binario ya compilado para la Raspberry Pi
 callgrind: directories
-	cd $(BIN_DIR) && valgrind --tool=callgrind --dump-instr=yes --cache-sim=yes --instr-atstart=no --callgrind-out-file=../$(RESULTS_DIR)/callgrind/callgrind.out.%p ./sensor_rpi
+	cd $(BIN_DIR) && valgrind --tool=callgrind --dump-instr=yes --cache-sim=yes --instr-atstart=yes --callgrind-out-file=../$(RESULTS_DIR)/callgrind/callgrind.out.%p ./sensor_rpi
 
 # Limpieza de binarios y archivos temporales
 clean:
