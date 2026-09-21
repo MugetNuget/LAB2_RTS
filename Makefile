@@ -5,10 +5,19 @@ CXX_CROSS  = aarch64-linux-gnu-g++
 # Banderas de compilación
 CXXFLAGS   = -std=c++11 -ggdb3 -O0 -Wall -Wextra -pedantic
 
+####
 # Banderas de enlace para la Raspberry Pi:
 # -static-libstdc++ y -static-libgcc evitan GLIBCXX/GLIBCCXX en la Pi,
 # pero -static es el que evita la dependencia de GLIBC_2.38 del host de compilación.
-LDFLAGS_RPI = -static-libstdc++ -static-libgcc -static
+#LDFLAGS_RPI = -static-libstdc++ -static-libgcc -static
+######
+
+# Banderas de enlace para la Raspberry Pi
+# Se enlazan estáticamente libstdc++ y libgcc para reducir
+# dependencias de las versiones disponibles en la Raspberry Pi.
+# Se evita -static para mantener compatibilidad con Valgrind.
+LDFLAGS_RPI = -static-libstdc++ -static-libgcc
+
 
 # Directorios del proyecto
 SRC_DIR     = src
