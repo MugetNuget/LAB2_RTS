@@ -20,7 +20,7 @@ SRC         = $(SRC_DIR)/sensor_data_processing.cpp
 TARGET_HOST = $(BIN_DIR)/sensor_host
 TARGET_RPI  = $(BIN_DIR)/sensor_rpi
 
-.PHONY: all directories clean host rpi git-sync git-pull help
+.PHONY: all directories clean host rpi callgrind git-sync git-pull help
 
 # Regla por defecto: crea carpetas y compila ambas versiones
 all: directories $(TARGET_HOST) $(TARGET_RPI)
@@ -43,6 +43,10 @@ rpi: directories $(TARGET_RPI)
 
 $(TARGET_RPI): $(SRC)
 	$(CXX_CROSS) $(CXXFLAGS) -o $@ $< $(LDFLAGS_RPI)
+
+# Perfilado con Callgrind del binario ya compilado para la Raspberry Pi
+callgrind: directories
+	cd $(BIN_DIR) && valgrind --tool=callgrind --dump-instr=yes --cache-sim=yes --instr-atstart=no --callgrind-out-file=../$(RESULTS_DIR)/callgrind/callgrind.out.%p ./sensor_rpi
 
 # Limpieza de binarios y archivos temporales
 clean:
@@ -72,6 +76,7 @@ help:
 	@echo "  make         - Compila ambas versiones (nativa y cruzada)"
 	@echo "  make host    - Compila solo la versión nativa (sensor_host)"
 	@echo "  make rpi     - Compila solo la versión cruzada (sensor_rpi)"
+	@echo "  make callgrind - Ejecuta sensor_rpi con Valgrind Callgrind"
 	@echo "  make clean   - Limpia los binarios generados"
 	@echo "  make git-sync - Hace git add ., commit con mensaje opcional y git push"
 	@echo "  make git-pull - Descarga e integra los cambios del repositorio remoto"
