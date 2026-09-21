@@ -8,7 +8,7 @@ CXXFLAGS   = -std=c++11 -ggdb3 -O0 -Wall -Wextra -pedantic
 # Banderas de enlace para la Raspberry Pi:
 # -static-libstdc++ y -static-libgcc evitan GLIBCXX/GLIBCCXX en la Pi,
 # pero -static es el que evita la dependencia de GLIBC_2.38 del host de compilación.
-LDFLAGS_RPI = -static-libstdc++ -static-libgcc -static
+LDFLAGS_RPI = -static
 
 # Directorios del proyecto
 SRC_DIR     = src
