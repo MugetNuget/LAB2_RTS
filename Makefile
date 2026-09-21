@@ -5,19 +5,25 @@ CXX_CROSS  = aarch64-linux-gnu-g++
 # Banderas de compilación
 CXXFLAGS   = -std=c++11 -ggdb3 -O0 -Wall -Wextra -pedantic
 
-####
+####anterior
 # Banderas de enlace para la Raspberry Pi:
 # -static-libstdc++ y -static-libgcc evitan GLIBCXX/GLIBCCXX en la Pi,
 # pero -static es el que evita la dependencia de GLIBC_2.38 del host de compilación.
 #LDFLAGS_RPI = -static-libstdc++ -static-libgcc -static
-######
+######anterior
 
+
+
+######### Bloque nuevo
+# Sysroot Debian 12 ARM64 / glibc 2.36
+SYSROOT_RPI = $(CURDIR)/sysroot
+CXXFLAGS_RPI = $(CXXFLAGS) --sysroot=$(SYSROOT_RPI)
 # Banderas de enlace para la Raspberry Pi
 # Se enlazan estáticamente libstdc++ y libgcc para reducir
 # dependencias de las versiones disponibles en la Raspberry Pi.
 # Se evita -static para mantener compatibilidad con Valgrind.
 LDFLAGS_RPI = -static-libstdc++ -static-libgcc
-
+########Bloque nuevo
 
 # Directorios del proyecto
 SRC_DIR     = src
@@ -50,8 +56,18 @@ $(TARGET_HOST): $(SRC)
 # Compilación Cruzada (ARM64 / Raspberry Pi)
 rpi: directories $(TARGET_RPI)
 
+########Bloque Viejo
+#$(TARGET_RPI): $(SRC)
+#	$(CXX_CROSS) $(CXXFLAGS) -o $@ $< $(LDFLAGS_RPI)
+########Bloque Viejo
+
+########Bloque Nuevo
 $(TARGET_RPI): $(SRC)
-	$(CXX_CROSS) $(CXXFLAGS) -o $@ $< $(LDFLAGS_RPI)
+	$(CXX_CROSS) $(CXXFLAGS_RPI) -o $@ $< $(LDFLAGS_RPI)
+########Bloque Nuevo
+
+
+
 
 # Limpieza de binarios y archivos temporales
 clean:
