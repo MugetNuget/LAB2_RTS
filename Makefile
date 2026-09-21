@@ -62,7 +62,7 @@ git-sync:
 		if [ -n "$$commit_message" ]; then \
 			git commit -m "$$commit_message"; \
 		else \
-			gsit commit --allow-empty-message -m ""; \
+				git commit --allow-empty-message -m ""; \
 		fi && git push; \
 	fi
 
