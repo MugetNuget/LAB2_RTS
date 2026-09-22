@@ -12,28 +12,24 @@ int read_sensor_value(){
     return rand() % 1024;
 }
 
-std::vector<int> generate_sensor_data(){
-    std::vector<int> readings;
-    readings.reserve(READINGS_PER_SENSOR);
+std::vector<int>* generate_sensor_data(){
+    std::vector<int>* readings = new std::vector<int>();
 
     for (int i = 0; i < READINGS_PER_SENSOR; ++i){
-        readings.push_back(read_sensor_value());
+        readings->push_back(read_sensor_value());
     }
 
     return readings;
 }
 
-double calculate_average(const std::vector<int>& data){
-    if (data.empty()) {
-        return 0.0;
+double calculate_average(std::vector<int>* data){
+    double sum = 0;
+
+    for (int i = 0; i < data->size(); ++i){
+        sum += (*data)[i];
     }
 
-    double sum = 0.0;
-    for (std::size_t i = 0; i < data.size(); ++i){
-        sum += data[i];
-    }
-
-    return sum / static_cast<double>(data.size());
+    return sum / data->size();
 }
 
 int main()
@@ -41,11 +37,9 @@ int main()
     srand(time(0));
 
     std::vector<double> averages;
-    averages.reserve(NUM_SENSORS);
-
     CALLGRIND_START_INSTRUMENTATION;
     for (int i = 0; i < NUM_SENSORS; ++i) {
-        std::vector<int> sensor_data = generate_sensor_data();
+        std::vector<int>* sensor_data = generate_sensor_data();
 
         double avg = calculate_average(sensor_data);
 
